@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hanako.Style — 東京の「素敵」が見つかるライフスタイルマガジン</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Serif JP & Noto Sans JP -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cream: {
+                            50: '#FCFBF7',
+                            100: '#FAF8F5',
+                            200: '#F4EFE6',
+                            300: '#E8DEC9',
+                        },
+                        vermilion: {
+                            500: '#E6533C',
+                            600: '#D23F28',
+                        },
+                        charcoal: {
+                            800: '#2C2A29',
+                            900: '#1A1918',
+                        },
+                        sage: '#A3B18A',
+                        matcha: '#6B705C'
+                    },
+                    fontFamily: {
+                        serifJP: ['"Noto Serif JP"', 'serif'],
+                        sansJP: ['"Noto Sans JP"', 'sans-serif'],
+                        display: ['"Playfair Display"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #FAF8F5;
+            color: #2C2A29;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .dark body {
+            background-color: #1A1918;
+            color: #E8DEC9;
+        }
+        /* Vertical writing utility for featured titles */
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F5;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #1A1918;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D8D0C5;
+            border-radius: 3px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #3A3836;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-vermilion-500 selection:text-white">
+
+    <!-- TOP HEADER / BRANDING -->
+    <header class="sticky top-0 z-40 bg-cream-100/90 dark:bg-charcoal-900/90 backdrop-blur-md border-b border-cream-300 dark:border-gray-800 transition-colors">
+        <!-- Sub-bar -->
+        <div class="max-w-7xl mx-auto px-4 py-1.5 border-b border-cream-200 dark:border-gray-800/60 text-xs text-stone-500 dark:text-stone-400 flex justify-between items-center">
+            <span class="tracking-widest uppercase font-mono text-[10px]">Issue No. 428 — Autumn/Winter in Tokyo</span>
+            <div class="flex items-center space-x-4">
+                <button id="saved-articles-btn" class="hover:text-vermilion-500 transition-colors flex items-center gap-1">
+                    <i class="fa-regular fa-bookmark"></i>
+                    <span>ブックマーク (<span id="saved-count">0</span>)</span>
+                </button>
+                <button id="theme-toggle" class="p-1 rounded hover:bg-cream-200 dark:hover:bg-gray-800 transition-colors" title="Toggle Theme">
+                    <i class="fa-solid fa-moon dark:hidden text-stone-600"></i>
+                    <i class="fa-solid fa-sun hidden dark:block text-amber-300"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Branding -->
+        <div class="max-w-7xl mx-auto px-4 py-5 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="text-center md:text-left">
+                <a href="#" class="inline-block">
+                    <h1 class="font-display font-semibold text-4xl md:text-5xl tracking-tight text-charcoal-800 dark:text-cream-100 hover:opacity-90 transition-opacity">
+                        Hanako<span class="text-vermilion-500">.</span>style
+                    </h1>
+                </a>
+                <p class="text-xs text-stone-500 dark:text-stone-400 tracking-widest mt-1 font-serifJP">
+                    東京の「いま」と「これから」を提案するライフスタイルマガジン
+                </p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="w-full md:w-72 relative">
+                <input type="text" id="search-input" placeholder="キーワード・エリアで検索..." 
+                       class="w-full pl-9 pr-4 py-2 bg-cream-50 dark:bg-stone-800 border border-cream-300 dark:border-stone-700 rounded-full text-xs focus:outline-none focus:border-vermilion-500 dark:focus:border-vermilion-500 text-stone-800 dark:text-stone-200 placeholder-stone-400">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
+            </div>
+        </div>
+
+        <!-- Category Nav -->
+        <nav class="max-w-7xl mx-auto px-4 overflow-x-auto scrollbar-none">
+            <ul id="category-nav" class="flex items-center space-x-6 md:space-x-8 text-sm font-medium border-t border-cream-200 dark:border-gray-800/80 py-3 whitespace-nowrap">
+                <li><button data-category="ALL" class="nav-btn active border-b-2 border-vermilion-500 text-vermilion-500 pb-1 transition-colors">すべて (ALL)</button></li>
+                <li><button data-category="Tokyo" class="nav-btn hover:text-vermilion-500 text-stone-600 dark:text-stone-300 pb-1 transition-colors">東京散歩 (Tokyo)</button></li>
+                <li><button data-category="Gourmet" class="nav-btn hover:text-vermilion-500 text-stone-600 dark:text-stone-300 pb-1 transition-colors">グルメ & カフェ (Gourmet)</button></li>
+                <li><button data-category="Travel" class="nav-btn hover:text-vermilion-500 text-stone-600 dark:text-stone-300 pb-1 transition-colors">旅・週末旅行 (Travel)</button></li>
+                <li><button data-category="Culture" class="nav-btn hover:text-vermilion-500 text-stone-600 dark:text-stone-300 pb-1 transition-colors">カルチャー & 本 (Culture)</button></li>
+                <li><button data-category="Design" class="nav-btn hover:text-vermilion-500 text-stone-600 dark:text-stone-300 pb-1 transition-colors">暮らしとデザイン (Design)</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow">
+        
+        <!-- HERO BANNER SECTION -->
+        <section class="mb-14 grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+            <!-- Main Hero Card -->
+            <div onclick="openArticle(1)" class="lg:col-span-8 group cursor-pointer relative overflow-hidden rounded-2xl border border-cream-300 dark:border-stone-800 bg-white dark:bg-stone-900 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between">
+                <div class="relative h-72 sm:h-96 w-full overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1200&q=80" alt="Tokyo Cafe" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+                    <div class="absolute top-4 left-4 bg-vermilion-500 text-white text-xs px-3 py-1 rounded-full font-sans uppercase tracking-wider font-semibold">
+                        特集 / SPECIAL
+                    </div>
+                </div>
+                <div class="p-6 md:p-8 flex-1 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-3 text-xs text-stone-500 dark:text-stone-400 mb-2">
+                            <span class="text-vermilion-500 font-semibold">#Tokyo #Gourmet</span>
+                            <span>•</span>
+                            <span>2026.11.02</span>
+                        </div>
+                        <h2 class="font-serifJP text-2xl sm:text-3xl font-bold leading-relaxed text-charcoal-800 dark:text-cream-50 group-hover:text-vermilion-500 transition-colors">
+                            奥渋・神山町で過ごす、静かな秋の午後。心を満たす名店喫茶と独立系書店巡り
+                        </h2>
+                        <p class="text-stone-600 dark:text-stone-300 text-sm mt-3 line-clamp-2 font-light leading-relaxed">
+                            喧騒から一歩離れた奥渋谷エリア。こだわりのシングルオリジンコーヒーを提供する隠れ家カフェや、店主の美学が光るブックショップをのんびり散歩する週末ガイド。
+                        </p>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between border-t border-cream-200 dark:border-stone-800 pt-4 text-xs font-medium text-stone-500">
+                        <span>読了時間: 約 5 分</span>
+                        <span class="text-vermilion-500 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                            記事を読む <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vertical / Secondary Hero Cards -->
+            <div class="lg:col-span-4 flex flex-col gap-6">
+                <!-- Secondary 1 -->
+                <div onclick="openArticle(2)" class="group cursor-pointer p-5 bg-white dark:bg-stone-900 rounded-2xl border border-cream-300 dark:border-stone-800 flex gap-4 items-center shadow-sm hover:shadow-md transition-all">
+                    <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=400&q=80" alt="Kyoto Hotel" class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl object-cover flex-shrink-0 group-hover:scale-105 transition-transform duration-500">
+                    <div class="flex-1">
+                        <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">#Travel</span>
+                        <h3 class="font-serifJP text-sm font-semibold text-charcoal-800 dark:text-cream-100 group-hover:text-vermilion-500 transition-colors line-clamp-2 mt-1 leading-snug">
+                            京都・北山エリアで巡る、町家をリノベーションしたモダン町家ホテル
+                        </h3>
+                        <p class="text-xs text-stone-400 mt-2">2026.10.28</p>
+                    </div>
+                </div>
+
+                <!-- Secondary 2 -->
+                <div onclick="openArticle(3)" class="group cursor-pointer p-5 bg-white dark:bg-stone-900 rounded-2xl border border-cream-300 dark:border-stone-800 flex gap-4 items-center shadow-sm hover:shadow-md transition-all">
+                    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=400&q=80" alt="Modern Interior" class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl object-cover flex-shrink-0 group-hover:scale-105 transition-transform duration-500">
+                    <div class="flex-1">
+                        <span class="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest">#Design</span>
+                        <h3 class="font-serifJP text-sm font-semibold text-charcoal-800 dark:text-cream-100 group-hover:text-vermilion-500 transition-colors line-clamp-2 mt-1 leading-snug">
+                            北欧ヴィンテージ食器と和器を美しくミックスする暮らしのスタイリング
+                        </h3>
+                        <p class="text-xs text-stone-400 mt-2">2026.10.25</p>
+                    </div>
+                </div>
+
+                <!-- Hanako Quote Box -->
+                <div class="p-6 rounded-2xl bg-cream-200/70 dark:bg-stone-800/60 border border-cream-300 dark:border-stone-700 flex flex-col justify-center items-center text-center">
+                    <span class="font-display italic text-2xl text-vermilion-500 mb-1">Hanako Editorial Pick</span>
+                    <p class="font-serifJP text-xs leading-relaxed text-stone-700 dark:text-stone-300 max-w-xs">
+                        「日々の暮らしの中に、少しの贅沢と新しい発見を。」今週も東京の心地よい風景をお届けします。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CATEGORY QUICK FILTER BAR -->
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-cream-300 dark:border-stone-800">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-vermilion-500"></span>
+                <h3 id="current-filter-title" class="font-serifJP font-semibold text-lg text-charcoal-800 dark:text-cream-100">すべての最新記事</h3>
+            </div>
+            <div class="text-xs text-stone-500">
+                全 <span id="article-count" class="font-bold text-vermilion-500">6</span> 件
+            </div>
+        </div>
+
+        <!-- MAIN ARTICLE GRID -->
+        <section id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Dynamic Content loaded via JS -->
+        </section>
+
+        <!-- NEWSLETTER / SUBSCRIBE BANNER -->
+        <section class="my-16 p-8 md:p-12 rounded-3xl bg-gradient-to-r from-cream-200 via-cream-100 to-cream-200 dark:from-stone-900 dark:via-stone-800 dark:to-stone-900 border border-cream-300 dark:border-stone-700 text-center relative overflow-hidden">
+            <div class="max-w-xl mx-auto relative z-10">
+                <span class="font-display text-sm text-vermilion-500 uppercase tracking-widest font-semibold">Hanako Newsletter</span>
+                <h3 class="font-serifJP text-2xl md:text-3xl font-bold mt-2 text-charcoal-800 dark:text-cream-100">
+                    週末をもっと楽しくする情報を、あなたのInboxへ。
+                </h3>
+                <p class="text-xs md:text-sm text-stone-600 dark:text-stone-300 mt-3 font-light leading-relaxed">
+                    毎週金曜日に厳選された東京のイベント、話題の新店舗、おすすめの旅情報を無料でお届けします。
+                </p>
+                <form onsubmit="event.preventDefault(); showToast('メルマガの登録が完了しました！');" class="mt-6 flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                    <input type="email" placeholder="メールアドレスを入力" required class="flex-1 px-4 py-3 rounded-full bg-white dark:bg-stone-800 border border-cream-300 dark:border-stone-700 text-sm focus:outline-none focus:border-vermilion-500 dark:text-cream-100">
+                    <button type="submit" class="px-6 py-3 rounded-full bg-vermilion-500 hover:bg-vermilion-600 text-white font-medium text-sm transition-colors shadow-sm">
+                        登録する
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-cream-200 dark:bg-stone-950 border-t border-cream-300 dark:border-stone-800 text-stone-600 dark:text-stone-400 py-12 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div class="md:col-span-1">
+                <h2 class="font-display text-3xl font-semibold text-charcoal-800 dark:text-cream-100">
+                    Hanako<span class="text-vermilion-500">.</span>style
+                </h2>
+                <p class="text-xs text-stone-500 dark:text-stone-400 mt-2 font-serifJP leading-relaxed">
+                    都市で生きる知的な女性のための<br>ライフスタイル & カルチャーウェブマガジン
+                </p>
+            </div>
+            <div>
+                <h4 class="font-serifJP text-sm font-semibold text-charcoal-800 dark:text-cream-200 mb-3">カテゴリー</h4>
+                <ul class="space-y-2 text-xs">
+                    <li><a href="#" class="hover:text-vermilion-500 transition-colors">東京散歩 / Tokyo Walk</a></li>
+                    <li><a href="#" class="hover:text-vermilion-500 transition-colors">グルメ & Sweets</a></li>
+                    <li><a href="#" class="hover:text-vermilion-500 transition-colors">週末旅行 / Weekend Travel</a></li>
+                    <li><a href="#" class="hover:text-vermilion-500 transition-colors">インテリア & 暮らし</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-serifJP text-sm font-semibold text-charcoal-800 dark:text-cream-200 mb-3">Hanakoについて</h4>
+                <ul class="space-y-2 text-xs">
+                    <li><a href="#" class="hover:text-vermilion-500 transition-colors">編集部からのご挨拶</a></li>
+                    <li><a href="#" class="hover:text-vermilion-500 transition-colors">広告掲載について</a></li>
+                    <li><a href="#" class="hover:text-vermilion-500 transition-colors">プライバシーポリシー</a></li>
+                    <li><a href="#" class="hover:text-vermilion-500 transition-colors">お問い合わせ</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-serifJP text-sm font-semibold text-charcoal-800 dark:text-cream-200 mb-3">Follow Us</h4>
+                <div class="flex space-x-3 text-lg">
+                    <a href="#" class="w-9 h-9 rounded-full bg-white dark:bg-stone-800 flex items-center justify-center hover:text-vermilion-500 transition-colors shadow-sm"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="w-9 h-9 rounded-full bg-white dark:bg-stone-800 flex items-center justify-center hover:text-vermilion-500 transition-colors shadow-sm"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" class="w-9 h-9 rounded-full bg-white dark:bg-stone-800 flex items-center justify-center hover:text-vermilion-500 transition-colors shadow-sm"><i class="fa-brands fa-pinterest"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 pt-6 border-t border-cream-300/60 dark:border-stone-800 text-center text-[11px] text-stone-400">
+            &copy; 2026 Hanako.style Web Magazine. Inspired by Japanese Editorial Aesthetics.
+        </div>
+    </footer>
+
+    <!-- SLIDE-IN ARTICLE MODAL / DRAWER -->
+    <div id="article-modal" class="fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 opacity-0">
+        <!-- Backdrop -->
+        <div id="modal-backdrop" class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"></div>
+        
+        <!-- Drawer Panel -->
+        <div id="modal-panel" class="absolute right-0 top-0 bottom-0 w-full max-w-3xl bg-cream-50 dark:bg-stone-900 shadow-2xl overflow-y-auto transform translate-x-full transition-transform duration-300 ease-out pointer-events-auto flex flex-col">
+            
+            <!-- Sticky Modal Header -->
+            <div class="sticky top-0 z-10 bg-cream-50/90 dark:bg-stone-900/90 backdrop-blur-md px-6 py-4 border-b border-cream-300 dark:border-stone-800 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <span id="modal-category" class="bg-vermilion-500 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">
+                        CATEGORY
+                    </span>
+                    <span id="modal-date" class="text-xs text-stone-500 dark:text-stone-400">DATE</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="modal-bookmark-btn" class="p-2 rounded-full hover:bg-cream-200 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300 transition-colors" title="ブックマーク保存">
+                        <i class="fa-regular fa-bookmark text-lg"></i>
+                    </button>
+                    <button id="modal-close-btn" class="p-2 rounded-full hover:bg-cream-200 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300 transition-colors">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Article Body Content -->
+            <div class="p-6 md:p-10 flex-1 space-y-6">
+                <h1 id="modal-title" class="font-serifJP text-2xl md:text-3xl font-bold leading-relaxed text-charcoal-800 dark:text-cream-50">
+                    TITLE GOES HERE
+                </h1>
+
+                <div class="flex items-center justify-between text-xs text-stone-500 dark:text-stone-400 py-2 border-y border-cream-200 dark:border-stone-800">
+                    <span>著者: Hanako 編集部</span>
+                    <span id="modal-read-time">読了時間: 約 4 分</span>
+                </div>
+
+                <div class="rounded-2xl overflow-hidden my-6">
+                    <img id="modal-image" src="" alt="Article cover" class="w-full h-80 object-cover">
+                </div>
+
+                <!-- Rich Editorial Text Container -->
+                <div id="modal-content" class="font-serifJP leading-loose text-stone-700 dark:text-stone-300 space-y-6 text-sm md:text-base">
+                    <!-- Dynamic Body Text Inserted Here -->
+                </div>
+
+                <!-- Social Share Bar -->
+                <div class="pt-8 border-t border-cream-300 dark:border-stone-800">
+                    <p class="text-xs text-stone-500 mb-3 text-center font-sans">この記事をシェアする</p>
+                    <div class="flex justify-center gap-4">
+                        <button onclick="showToast('記事リンクをコピーしました')" class="px-4 py-2 rounded-full border border-cream-300 dark:border-stone-700 text-xs flex items-center gap-2 hover:bg-cream-200 dark:hover:bg-stone-800 transition-colors">
+                            <i class="fa-regular fa-copy"></i> リンクをコピー
+                        </button>
+                        <button onclick="showToast('X (Twitter) で共有窓を開きました')" class="px-4 py-2 rounded-full border border-cream-300 dark:border-stone-700 text-xs flex items-center gap-2 hover:bg-cream-200 dark:hover:bg-stone-800 transition-colors">
+                            <i class="fa-brands fa-x-twitter"></i> シェア
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOOKMARKS DRAWER MODAL -->
+    <div id="bookmarks-modal" class="fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 opacity-0">
+        <div id="bookmarks-backdrop" class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+        <div id="bookmarks-panel" class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-cream-50 dark:bg-stone-900 shadow-2xl p-6 overflow-y-auto transform translate-x-full transition-transform duration-300 pointer-events-auto flex flex-col">
+            <div class="flex justify-between items-center pb-4 border-b border-cream-300 dark:border-stone-800">
+                <h3 class="font-serifJP font-semibold text-lg text-charcoal-800 dark:text-cream-100">
+                    <i class="fa-solid fa-bookmark text-vermilion-500 mr-2"></i>保存した記事
+                </h3>
+                <button id="bookmarks-close-btn" class="p-1 rounded hover:bg-cream-200 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div id="bookmarks-list" class="flex-1 my-4 space-y-4">
+                <!-- Bookmarked Items rendering dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-charcoal-900 text-cream-100 text-xs px-4 py-3 rounded-xl shadow-lg transform translate-y-16 opacity-0 transition-all duration-300 flex items-center gap-2">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toast-message">メッセージ</span>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Article Data Source
+        const ARTICLES = [
+            {
+                id: 1,
+                title: "奥渋・神山町で過ごす、静かな秋の午後。心を満たす名店喫茶と独立系書店巡り",
+                category: "Tokyo",
+                tags: ["Tokyo", "Gourmet", "Cafe"],
+                date: "2026.11.02",
+                readTime: "約 5 分",
+                image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80",
+                excerpt: "喧騒から一歩離れた奥渋谷エリア。こだわりのシングルオリジンコーヒーを提供する隠れ家カフェや、店主の美学が光るブックショップをのんびり散歩する週末ガイド。",
+                content: `
+                    <p class="first-letter:text-3xl first-letter:font-bold first-letter:text-vermilion-500">渋谷駅から徒歩10分。賑やかなスクランブル交差点を抜け、NHK放送センターの西側に広がる「奥渋谷（奥渋）」エリア。落ち着いた佇まいのショップやこだわりのカフェが点在するこの街は、秋の散策にぴったりのスポットです。</p>
+                    
+                    <h3 class="text-lg font-bold border-l-2 border-vermilion-500 pl-3 my-4 text-charcoal-800 dark:text-cream-100">1. 香りと静寂に包まれる「珈琲と本 Roast Room」</h3>
+                    <p>まず訪れたいのは、神山町の路地裏にひっそりと佇む自家焙煎珈琲店。ネルドリップで丁寧に淹れられた深煎りブレンドは、芳醇な香りとまろやかな苦みが特徴。静かな店内に流れるジャズの音色に耳を傾けながら、読書に没頭する贅沢な時間を過ごせます。</p>
+
+                    <blockquote class="my-6 p-4 bg-cream-200/50 dark:bg-stone-800/50 border-l-4 border-vermilion-500 text-stone-700 dark:text-stone-300 italic text-sm">
+                        「忙しい日常の中で、一杯の珈琲と一冊の本に向き合う小一時間が、心を豊かにリセットしてくれます。」（オーナー談）
+                    </blockquote>
+
+                    <h3 class="text-lg font-bold border-l-2 border-vermilion-500 pl-3 my-4 text-charcoal-800 dark:text-cream-100">2. 店主の選書センスが光る独立系ブックショップ</h3>
+                    <p>カフェをあとにしたら、すぐ近くのグラフィックデザインと写真集を中心としたセレクト書店へ。一般的な書店では手に入りにくい海外のZINEやアートブックが美しくディスプレイされており、眺めているだけでインスピレーションを刺激されます。</p>
+                `
+            },
+            {
+                id: 2,
+                title: "京都・北山エリアで巡る、町家をリノベーションしたモダン町家ホテル",
+                category: "Travel",
+                tags: ["Travel", "Kyoto", "Hotel"],
+                date: "2026.10.28",
+                readTime: "約 4 分",
+                image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
+                excerpt: "歴史ある伝統的な町家構造を残しつつ、北欧モダンデザインのインテリアを取り入れた上質な滞在体験。京都の新しいステイの形を提案します。",
+                content: `
+                    <p>古都・京都の北部に位置する北山。自然豊かで落ち着いた街並みに、伝統美と現代デザインが融合した新しいスタイルの宿が登場しています。</p>
+                    <p>築100年を超える木造町家を再構築した空間は、梁や土壁の温もりを生かしながらも、北欧の照明やモダンファニチャーを自然に調和させています。坪庭を眺めながら過ごす朝茶の時間は格別です。</p>
+                `
+            },
+            {
+                id: 3,
+                title: "北欧ヴィンテージ食器と和器を美しくミックスする暮らしのスタイリング",
+                category: "Design",
+                tags: ["Design", "Lifestyle", "Interior"],
+                date: "2026.10.25",
+                readTime: "約 3 分",
+                image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
+                excerpt: "フィンランドのArabiaやIittalaの名作と、日本の伝統的な美濃焼や有田焼。食卓を華やかに飾るミキシングテクニックをご紹介。",
+                content: `
+                    <p>一見まったく異なるルーツを持つ北欧デザインと日本の和食器。しかし実は「素材への敬意」や「機能美」において深い共通点を持っています。</p>
+                    <p>ベースとなるウッドプレートの上に、温かみのあるアースカラーの陶器を重ねることで、洗練されつつも温もりのあるテーブルコーディネートが完成します。</p>
+                `
+            },
+            {
+                id: 4,
+                title: "秋の夜長に味わいたい、都内のスモールバッチ・クラフトクラフトチョコレート",
+                category: "Gourmet",
+                tags: ["Gourmet", "Sweets", "Tokyo"],
+                date: "2026.10.20",
+                readTime: "約 4 分",
+                image: "https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=800&q=80",
+                excerpt: "カカオ豆の選別から板チョコにするまでを一貫して行う「Bean to Bar」。職人のこだわりが詰まった最高の一片を求めて。",
+                content: `
+                    <p>蔵前や代々木八幡を中心に広がるクラフトチョコレート工房。シングルオリジンのカカオ豆が持つフルーティーな酸味やナッツのような香ばしさをダイレクトに感じられるショップを厳選しました。</p>
+                `
+            },
+            {
+                id: 5,
+                title: "【連載】本好き編集者が選ぶ、今月読むべき心にじんわり染みるおすすめ小説3選",
+                category: "Culture",
+                tags: ["Culture", "Books", "Review"],
+                date: "2026.10.15",
+                readTime: "約 6 分",
+                image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80",
+                excerpt: "季節の変わり目、少し立ち止まって自分と向き合いたい時に読みたい優しい物語。編集部員によるリアルな読書レビュー。",
+                content: `
+                    <p>日々の慌ただしさから解放される夜のひとときに、優しく寄り添ってくれる文学作品をご紹介。心があたたまる料理小説から、美しい描写で綴られる日常の短編集まで。</p>
+                `
+            },
+            {
+                id: 6,
+                title: "緑に囲まれた鎌倉の古民家ヴィラで叶える、1泊2日のリフレッシュリトリート",
+                category: "Travel",
+                tags: ["Travel", "Kamakura", "Weekend"],
+                date: "2026.10.10",
+                readTime: "約 5 分",
+                image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                excerpt: "都心から電車で1時間。海の風と竹林の静寂の中で、ヨガやオーガニック朝食を楽しむ癒やしの週末プラン。",
+                content: `
+                    <p>海と山に囲まれた歴史ある街・鎌倉。静寂な竹林のそばに位置するリノベーション古民家ヴィラで、デジタルデトックスの週末を過ごしませんか？</p>
+                `
+            }
+        ];
+
+        // State Management
+        let savedArticleIds = JSON.parse(localStorage.getItem('hanako_bookmarks') || '[]');
+        let currentCategory = 'ALL';
+        let activeArticleId = null;
+
+        // DOM Elements
+        const articlesGrid = document.getElementById('articles-grid');
+        const categoryNav = document.getElementById('category-nav');
+        const searchInput = document.getElementById('search-input');
+        const currentFilterTitle = document.getElementById('current-filter-title');
+        const articleCountEl = document.getElementById('article-count');
+        const savedCountEl = document.getElementById('saved-count');
+        
+        // Article Modal Elements
+        const articleModal = document.getElementById('article-modal');
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const modalPanel = document.getElementById('modal-panel');
+        const modalCategory = document.getElementById('modal-category');
+        const modalDate = document.getElementById('modal-date');
+        const modalTitle = document.getElementById('modal-title');
+        const modalReadTime = document.getElementById('modal-read-time');
+        const modalImage = document.getElementById('modal-image');
+        const modalContent = document.getElementById('modal-content');
+        const modalBookmarkBtn = document.getElementById('modal-bookmark-btn');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        // Bookmarks Modal Elements
+        const bookmarksModal = document.getElementById('bookmarks-modal');
+        const bookmarksPanel = document.getElementById('bookmarks-panel');
+        const bookmarksBackdrop = document.getElementById('bookmarks-backdrop');
+        const bookmarksList = document.getElementById('bookmarks-list');
+        const savedArticlesBtn = document.getElementById('saved-articles-btn');
+        const bookmarksCloseBtn = document.getElementById('bookmarks-close-btn');
+
+        // Theme Toggle
+        const themeToggleBtn = document.getElementById('theme-toggle');
+
+        // INITIALIZATION
+        document.addEventListener('DOMContentLoaded', () => {
+            renderArticles();
+            updateBookmarkCount();
+            setupEventListeners();
+        });
+
+        // RENDER ARTICLES GRID
+        function renderArticles(filterCategory = 'ALL', searchQuery = '') {
+            articlesGrid.innerHTML = '';
+
+            let filtered = ARTICLES.filter(art => {
+                const matchesCat = filterCategory === 'ALL' || art.category.toLowerCase() === filterCategory.toLowerCase();
+                const matchesSearch = searchQuery === '' || 
+                    art.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                    art.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    art.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()));
+                return matchesCat && matchesSearch;
+            });
+
+            articleCountEl.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                articlesGrid.innerHTML = `
+                    <div class="col-span-full py-12 text-center text-stone-400 font-serifJP">
+                        <i class="fa-regular fa-newspaper text-3xl mb-3"></i>
+                        <p>該当する記事が見つかりませんでした。</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(article => {
+                const isBookmarked = savedArticleIds.includes(article.id);
+                const card = document.createElement('article');
+                card.className = "group cursor-pointer bg-white dark:bg-stone-900 rounded-2xl border border-cream-300 dark:border-stone-800 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col";
+                card.onclick = () => openArticle(article.id);
+
+                card.innerHTML = `
+                    <div class="relative h-48 sm:h-52 overflow-hidden">
+                        <img src="${article.image}" alt="${article.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <span class="absolute top-3 left-3 bg-cream-100/90 dark:bg-stone-900/90 backdrop-blur-md text-charcoal-800 dark:text-cream-100 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                            #${article.category}
+                        </span>
+                        <button onclick="event.stopPropagation(); toggleBookmark(${article.id})" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 dark:bg-stone-800/80 backdrop-blur-md flex items-center justify-center text-stone-600 dark:text-stone-300 hover:text-vermilion-500 transition-colors">
+                            <i class="${isBookmarked ? 'fa-solid text-vermilion-500' : 'fa-regular'} fa-bookmark text-xs"></i>
+                        </button>
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 text-[11px] text-stone-400 mb-2">
+                                <span>${article.date}</span>
+                                <span>•</span>
+                                <span>${article.readTime}</span>
+                            </div>
+                            <h3 class="font-serifJP font-semibold text-base leading-snug text-charcoal-800 dark:text-cream-100 group-hover:text-vermilion-500 transition-colors line-clamp-2">
+                                ${article.title}
+                            </h3>
+                            <p class="text-xs text-stone-500 dark:text-stone-400 mt-2 line-clamp-2 leading-relaxed font-light">
+                                ${article.excerpt}
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-cream-200 dark:border-stone-800 flex items-center justify-between text-[11px] text-stone-400">
+                            <div class="flex gap-1.5 flex-wrap">
+                                ${article.tags.map(t => `<span class="bg-cream-100 dark:bg-stone-800 px-2 py-0.5 rounded text-stone-600 dark:text-stone-300 text-[10px]">#${t}</span>`).join('')}
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-[10px] text-stone-300 group-hover:text-vermilion-500 group-hover:translate-x-1 transition-all"></i>
+                        </div>
+                    </div>
+                `;
+                articlesGrid.appendChild(card);
+            });
+        }
+
+        // OPEN ARTICLE MODAL
+        function openArticle(id) {
+            const article = ARTICLES.find(a => a.id === id);
+            if (!article) return;
+
+            activeArticleId = id;
+            modalCategory.textContent = article.category;
+            modalDate.textContent = article.date;
+            modalTitle.textContent = article.title;
+            modalReadTime.textContent = `読了時間: ${article.readTime}`;
+            modalImage.src = article.image;
+            modalContent.innerHTML = article.content;
+
+            updateModalBookmarkIcon();
+
+            articleModal.classList.remove('pointer-events-none', 'opacity-0');
+            modalPanel.classList.remove('translate-x-full');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeArticleModal() {
+            modalPanel.classList.add('translate-x-full');
+            articleModal.classList.add('opacity-0');
+            setTimeout(() => {
+                articleModal.classList.add('pointer-events-none');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        // BOOKMARK MANAGEMENT
+        function toggleBookmark(id) {
+            const index = savedArticleIds.indexOf(id);
+            if (index > -1) {
+                savedArticleIds.splice(index, 1);
+                showToast('ブックマークを解除しました');
+            } else {
+                savedArticleIds.push(id);
+                showToast('記事をブックマークに保存しました');
+            }
+            localStorage.setItem('hanako_bookmarks', JSON.stringify(savedArticleIds));
+            updateBookmarkCount();
+            renderArticles(currentCategory, searchInput.value);
+            if (activeArticleId === id) updateModalBookmarkIcon();
+            renderBookmarksList();
+        }
+
+        function updateBookmarkCount() {
+            savedCountEl.textContent = savedArticleIds.length;
+        }
+
+        function updateModalBookmarkIcon() {
+            const isBookmarked = savedArticleIds.includes(activeArticleId);
+            modalBookmarkBtn.innerHTML = `<i class="${isBookmarked ? 'fa-solid text-vermilion-500' : 'fa-regular'} fa-bookmark text-lg"></i>`;
+            modalBookmarkBtn.onclick = () => toggleBookmark(activeArticleId);
+        }
+
+        // BOOKMARKS DRAWER
+        function openBookmarksModal() {
+            renderBookmarksList();
+            bookmarksModal.classList.remove('pointer-events-none', 'opacity-0');
+            bookmarksPanel.classList.remove('translate-x-full');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeBookmarksModal() {
+            bookmarksPanel.classList.add('translate-x-full');
+            bookmarksModal.classList.add('opacity-0');
+            setTimeout(() => {
+                bookmarksModal.classList.add('pointer-events-none');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        function renderBookmarksList() {
+            bookmarksList.innerHTML = '';
+            const savedArticles = ARTICLES.filter(a => savedArticleIds.includes(a.id));
+
+            if (savedArticles.length === 0) {
+                bookmarksList.innerHTML = `
+                    <p class="text-xs text-stone-400 text-center py-8 font-serifJP">
+                        保存された記事はありません。<br>気になる記事のブックマークアイコンを押してください。
+                    </p>
+                `;
+                return;
+            }
+
+            savedArticles.forEach(art => {
+                const item = document.createElement('div');
+                item.className = "flex items-center gap-3 p-3 bg-white dark:bg-stone-800 rounded-xl border border-cream-300 dark:border-stone-700 cursor-pointer hover:border-vermilion-500 transition-colors";
+                item.onclick = () => {
+                    closeBookmarksModal();
+                    openArticle(art.id);
+                };
+                item.innerHTML = `
+                    <img src="${art.image}" class="w-16 h-16 rounded-lg object-cover">
+                    <div class="flex-1 min-w-0">
+                        <span class="text-[10px] text-vermilion-500 font-bold uppercase">#${art.category}</span>
+                        <h4 class="font-serifJP text-xs font-semibold text-charcoal-800 dark:text-cream-100 truncate">${art.title}</h4>
+                        <span class="text-[10px] text-stone-400">${art.date}</span>
+                    </div>
+                    <button onclick="event.stopPropagation(); toggleBookmark(${art.id})" class="text-stone-400 hover:text-vermilion-500 p-2">
+                        <i class="fa-solid fa-trash text-xs"></i>
+                    </button>
+                `;
+                bookmarksList.appendChild(item);
+            });
+        }
+
+        // EVENT LISTENERS SETUP
+        function setupEventListeners() {
+            // Category Navigation
+            categoryNav.addEventListener('click', (e) => {
+                const btn = e.target.closest('.nav-btn');
+                if (!btn) return;
+
+                document.querySelectorAll('.nav-btn').forEach(b => {
+                    b.classList.remove('active', 'border-b-2', 'border-vermilion-500', 'text-vermilion-500');
+                    b.classList.add('text-stone-600', 'dark:text-stone-300');
+                });
+
+                btn.classList.add('active', 'border-b-2', 'border-vermilion-500', 'text-vermilion-500');
+                btn.classList.remove('text-stone-600', 'dark:text-stone-300');
+
+                currentCategory = btn.dataset.category;
+                currentFilterTitle.textContent = currentCategory === 'ALL' ? 'すべての最新記事' : `${currentCategory} の最新記事`;
+                renderArticles(currentCategory, searchInput.value);
+            });
+
+            // Search Input
+            searchInput.addEventListener('input', (e) => {
+                renderArticles(currentCategory, e.target.value);
+            });
+
+            // Article Modal Close Trigger
+            modalCloseBtn.addEventListener('click', closeArticleModal);
+            modalBackdrop.addEventListener('click', closeArticleModal);
+
+            // Bookmark Modal Trigger
+            savedArticlesBtn.addEventListener('click', openBookmarksModal);
+            bookmarksCloseBtn.addEventListener('click', closeBookmarksModal);
+            bookmarksBackdrop.addEventListener('click', closeBookmarksModal);
+
+            // Dark/Warm Theme Toggle
+            themeToggleBtn.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+            });
+        }
+
+        // TOAST NOTIFICATION UTILITY
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.textContent = msg;
+
+            toast.classList.remove('translate-y-16', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-16', 'opacity-0');
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
